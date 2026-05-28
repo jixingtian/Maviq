@@ -1,7 +1,3 @@
-"""
-Run MAViQ experiments and compute ASR / ATC metrics.
-"""
-
 import argparse
 import hashlib
 import json
@@ -121,7 +117,7 @@ def parse_args():
         choices=["qwen3vl", "llava_ov", "internvl25", "gpt4o", "gpt51", "gemini31pro"],
     )
     parser.add_argument("--method", default="maviq", choices=["maviq"])
-    parser.add_argument("--dataset", default=PRIMARY_DATASET, choices=["mm_safety", "jailbreakv", "vljailbreak"])
+    parser.add_argument("--dataset", default=PRIMARY_DATASET, choices=["mm_safety", "jailbreakv"])
     parser.add_argument("--max-turns", type=int, default=MAX_TURNS)
     parser.add_argument("--sd-device", default=SD_DEVICE)
     parser.add_argument("--judge-device", default=JUDGE_DEVICE)
@@ -216,11 +212,7 @@ def main():
     explicit_max_turns = "--max-turns" in sys.argv
 
     logger.add(LOGS_DIR / f"{args.target}_maviq_{int(time.time())}.log")
-    logger.info(
-        "Using explicit devices | "
-        f"target={args.target_device}, planner={args.planner_device}, "
-        f"sd={args.sd_device}, judge={args.judge_device}"
-    )
+    logger.info(f"Using explicit devices | target={args.target_device}, planner={args.planner_device}, sd={args.sd_device}, judge={args.judge_device}")
 
     judge = build_judge(args.judge, args.judge_device)
 

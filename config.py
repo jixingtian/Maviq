@@ -1,10 +1,3 @@
-"""
-MAViQ configuration.
-
-Paths and API credentials are loaded from environment variables where possible.
-This file intentionally contains only the main MAViQ method configuration.
-"""
-
 import os
 from pathlib import Path
 
@@ -12,8 +5,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
-# Paths
 WORKSPACE = Path(os.getenv("MAVIQ_WORKSPACE", Path(__file__).resolve().parent)).expanduser()
 RESULTS_DIR = Path(os.getenv("MAVIQ_RESULTS_DIR", WORKSPACE / "results")).expanduser()
 DATA_DIR = Path(os.getenv("MAVIQ_DATA_DIR", WORKSPACE / "data")).expanduser()
@@ -22,8 +13,6 @@ LOGS_DIR = Path(os.getenv("MAVIQ_LOGS_DIR", WORKSPACE / "logs")).expanduser()
 for directory in (RESULTS_DIR, DATA_DIR, LOGS_DIR):
     directory.mkdir(parents=True, exist_ok=True)
 
-
-# API settings
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 OPENAI_API_BASE = os.getenv("OPENAI_API_BASE") or None
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
@@ -32,9 +21,6 @@ GEMINI_API_BASE = os.getenv(
     "https://generativelanguage.googleapis.com/v1beta/openai/",
 )
 
-
-# Model paths. Set MAVIQ_MODEL_BASE to a local checkpoint root if models are
-# mirrored on disk; otherwise the defaults below use public HuggingFace IDs.
 MODEL_BASE_ENV = os.getenv("MAVIQ_MODEL_BASE")
 MODEL_BASE = Path(MODEL_BASE_ENV).expanduser() if MODEL_BASE_ENV else None
 
@@ -47,8 +33,6 @@ def model_path(env_name: str, hf_id: str) -> str:
         return str(MODEL_BASE / hf_id)
     return hf_id
 
-
-# Planner and auxiliary modules
 PLANNER_MODEL = os.getenv(
     "MAVIQ_PLANNER_MODEL",
     model_path("MAVIQ_QWEN3VL_MODEL", "Qwen/Qwen3-VL-8B-Instruct"),
@@ -60,8 +44,6 @@ PLANNER_TEMP = float(os.getenv("MAVIQ_PLANNER_TEMP", "1.0"))
 PLANNER_MAX_TOKENS = int(os.getenv("MAVIQ_PLANNER_MAX_TOKENS", "1024"))
 PLANNER_MAX_PARSE_RETRIES = int(os.getenv("MAVIQ_PLANNER_MAX_PARSE_RETRIES", "3"))
 
-
-# Image generation
 SD_MODEL_ID = os.getenv(
     "MAVIQ_SD_MODEL_ID",
     model_path("MAVIQ_SD_MODEL_ID", "stabilityai/stable-diffusion-3.5-large"),
@@ -77,8 +59,6 @@ MAVIQ_IMAGE_NEGATIVE_PROMPT = (
     "spreadsheet, poster wall, oversized table, dense grid, blank image, black image"
 )
 
-
-# Judges
 JUDGE_OPENAI_MODEL = os.getenv("MAVIQ_JUDGE_OPENAI_MODEL", "gpt-5.1-2025-11-13")
 JUDGE_MODEL_ID = os.getenv(
     "MAVIQ_LLAMA_GUARD_MODEL",
@@ -87,8 +67,6 @@ JUDGE_MODEL_ID = os.getenv(
 JUDGE_DEVICE = os.getenv("MAVIQ_JUDGE_DEVICE", "cuda:0")
 JUDGE_MAX_NEW_TOKENS = int(os.getenv("MAVIQ_JUDGE_MAX_NEW_TOKENS", "20"))
 
-
-# Target models used in the paper.
 TARGET_MODELS = {
     "qwen3vl": {
         "model_id": os.getenv(
@@ -136,12 +114,8 @@ TARGET_MODELS = {
 }
 PRIMARY_TARGET = os.getenv("MAVIQ_PRIMARY_TARGET", "llava_ov")
 
-
-# Attack controller
 MAX_TURNS = int(os.getenv("MAVIQ_MAX_TURNS", "5"))
 
-
-# Datasets
 DATASETS = {
     "mm_safety": {
         "path": Path(os.getenv("MAVIQ_MM_SAFETY_PATH", DATA_DIR / "MM-SafetyBench")).expanduser(),
@@ -152,10 +126,6 @@ DATASETS = {
     "jailbreakv": {
         "path": Path(os.getenv("MAVIQ_JAILBREAKV_PATH", DATA_DIR / "JailBreakV-28K")).expanduser(),
         "csv_name": os.getenv("MAVIQ_JAILBREAKV_CSV", "mini_JailBreakV_28K.csv"),
-        "sample_size": None,
-    },
-    "vljailbreak": {
-        "path": Path(os.getenv("MAVIQ_VLJAILBREAK_PATH", DATA_DIR / "VLJailbreakBench")).expanduser(),
         "sample_size": None,
     },
 }

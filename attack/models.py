@@ -1,7 +1,7 @@
-"""
-MAViQ — Target VLM Wrappers
-Unified interface for all target models (local + API).
-"""
+
+
+
+
 
 import base64
 import re
@@ -22,7 +22,7 @@ from config import (
 )
 
 
-# ── Base class ────────────────────────────────────────────────────
+                                                                    
 class BaseVLM:
     name: str = "base"
 
@@ -30,7 +30,7 @@ class BaseVLM:
         raise NotImplementedError
 
 
-# ── Qwen3-VL-8B ─────────────────────────────────────────────────
+                                                                  
 class Qwen3VL(BaseVLM):
     name = "qwen3vl"
 
@@ -51,7 +51,7 @@ class Qwen3VL(BaseVLM):
         self.process_vision_info = process_vision_info
 
     def chat(self, messages: list) -> str:
-        # Convert OpenAI-format messages to Qwen3-VL format
+                                                           
         qwen_msgs = []
         for msg in messages:
             role = msg["role"]
@@ -64,7 +64,7 @@ class Qwen3VL(BaseVLM):
                     if item["type"] == "text":
                         qwen_content.append({"type": "text", "text": item["text"]})
                     elif item["type"] == "image_url":
-                        # Extract base64 image
+                                              
                         url = item["image_url"]["url"]
                         if url.startswith("data:image"):
                             b64 = url.split(",", 1)[1]
@@ -92,7 +92,7 @@ class Qwen3VL(BaseVLM):
         return self.processor.batch_decode(out, skip_special_tokens=True)[0].strip()
 
 
-# ── LLaVA-OneVision-1.5-8B ────────────────────────────────────────
+                                                                    
 class LLaVAOneVision(BaseVLM):
     name = "llava_ov"
 
@@ -157,7 +157,7 @@ class LLaVAOneVision(BaseVLM):
         return self.processor.batch_decode(trimmed, skip_special_tokens=True)[0].strip()
 
 
-# ── InternVL-2.5-8B ───────────────────────────────────────────────
+                                                                    
 class InternVL25(BaseVLM):
     name = "internvl25"
 
@@ -235,7 +235,7 @@ class InternVL25(BaseVLM):
 
 
 
-# ── OpenAI-compatible API VLMs ────────────────────────────────────
+                                                                    
 class OpenAICompatibleVLM(BaseVLM):
     name = ""
     api_provider = "openai"
@@ -280,7 +280,7 @@ class Gemini31ProVLM(OpenAICompatibleVLM):
     api_provider = "gemini"
 
 
-# ── Factory ───────────────────────────────────────────────────────
+                                                                    
 def load_target_model(name: str, device: Optional[str] = None) -> BaseVLM:
     if device is not None and name in TARGET_MODELS:
         TARGET_MODELS[name]["device"] = device

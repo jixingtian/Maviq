@@ -56,7 +56,6 @@ Place datasets under `data/` or set dataset paths explicitly:
 ```bash
 export MAVIQ_MM_SAFETY_PATH=/path/to/MM-SafetyBench
 export MAVIQ_JAILBREAKV_PATH=/path/to/JailBreakV-28K
-export MAVIQ_VLJAILBREAK_PATH=/path/to/VLJailbreakBench
 ```
 
 The default JailbreakV CSV name is `mini_JailBreakV_28K.csv`; override it with
@@ -70,11 +69,9 @@ data/
     data/<scenario_name>/Text_only.parquet
   JailBreakV-28K/
     JailBreakV_28K/mini_JailBreakV_28K.csv
-  VLJailbreakBench/
-    vlbreakbench_base.json
 ```
 
-Supported dataset names are `jailbreakv`, `mm_safety`, and `vljailbreak`.
+Supported dataset names are `jailbreakv` and `mm_safety`.
 
 ## Run MAViQ
 
@@ -140,8 +137,8 @@ start a fresh run.
 `--target` selects the target MLLM. Supported values are `qwen3vl`, `llava_ov`,
 `internvl25`, `gpt4o`, `gpt51`, and `gemini31pro`.
 
-`--dataset` selects the evaluation dataset. Supported values are `jailbreakv`,
-`mm_safety`, and `vljailbreak`.
+`--dataset` selects the evaluation dataset. Supported values are `jailbreakv`
+and `mm_safety`.
 
 `--planner-backend` selects attacker-side auxiliary modules. Use `gpt4o` for the
 default paper setting or `qwen3vl` for a local planner/router setting.
